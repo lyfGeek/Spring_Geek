@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!-- 配置 Spring IoC。配置 Service 对象。-->
+    <bean id="accountService" class="com.geek.service.impl.AccountServiceImpl"/>
+
+    <!-- 配置 Logger 类。-->
+    <bean id="logger" class="com.geek.log.Logger"/>
+
+    <aop:config>
+        <!-- 必须在切面之前。-->
+        <!-- 切入点表达式。-->
+        <aop:pointcut id="pt1" expression="execution(* com.geek.service.impl.AccountServiceImpl.*(..))"/>
+
+        <aop:aspect id="logAdvice" ref="logger">
+            <!-- 配置通知类型，并且建立通知方法和切入点方法的关联。-->
+            <!--
+                        <aop:before method="beforePrintLog"
+                                    pointcut-ref="pt1"/>
+                        <aop:after-returning method="afterReturningPrintLog" pointcut-ref="pt1"/>
+                        <aop:after-throwing method="afterThrowingPrintLog" pointcut-ref="pt1"/>
+                        <aop:after method="afterPrintLog" pointcut-ref="pt1"/>
+            -->
+
+            <!-- 环绕通知。-->
+            <aop:around method="aroundPrintLog" pointcut-ref="pt1"/>
+        </aop:aspect>
+
+    </aop:config>
+</beans>

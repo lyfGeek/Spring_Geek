@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                http://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.springframework.org/schema/context
+                http://www.springframework.org/schema/context/spring-context.xsd
+">
+
+    <context:component-scan base-package="com.geek"/>
+
+    <!--
+
+        &lt;!&ndash; 配置 service 对象。&ndash;&gt;
+        <bean id="accountService" class="com.geek.service.impl.AccountServiceImpl">
+            &lt;!&ndash; 注入 dao。&ndash;&gt;
+            <property name="accountDao" ref="accountDao"/>
+        </bean>
+
+        &lt;!&ndash; 配置 dao 对象。&ndash;&gt;
+        <bean id="accountDao" class="com.geek.dao.impl.AccountDaoImpl">
+            &lt;!&ndash; 注入 QueryRunner。&ndash;&gt;
+            <property name="queryRunner" ref="queryRunner"/>
+        </bean>
+    -->
+    <!--
+
+        &lt;!&ndash; 配置 QueryRunner 对象。&ndash;&gt;
+        <bean id="queryRunner" class="org.apache.commons.dbutils.QueryRunner"
+              scope="prototype">&lt;!&ndash; prototype，每来一个连接创建一个对象，线程安全。&ndash;&gt;
+            &lt;!&ndash; 注入数据源。&ndash;&gt;
+            <constructor-arg name="ds" ref="dataSource"/>
+        </bean>
+
+        &lt;!&ndash; 配置数据源对象。&ndash;&gt;
+        <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+            &lt;!&ndash; 连接数据库的必备信息。&ndash;&gt;
+            <property name="driverClass" value="com.mysql.jdbc.Driver"/>
+            <property name="jdbcUrl" value="jdbc:mysql://192.168.223.128:3306/geek_spring_dbutils"/>
+            <property name="user" value="root"/>
+            <property name="password" value="root"/>
+        </bean>
+    -->
+
+</beans>

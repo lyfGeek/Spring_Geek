@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- 配置代理 Service。-->
+    <bean id="proxyAccountService" factory-bean="beanFactory" factory-method="getAccountService"/>
+
+    <!-- 配置 BeanFactory。-->
+    <bean id="beanFactory" class="com.geek.factory.BeanFactory">
+        <property name="accountService" ref="accountService"/>
+
+        <!-- 注入事务管理器。-->
+        <property name="transactionManager" ref="txManager"/>
+    </bean>
+
+    <!-- 配置 service 对象。-->
+    <bean id="accountService" class="com.geek.service.impl.AccountServiceImpl">
+        <!-- 注入 dao。-->
+        <property name="accountDao" ref="accountDao"/>
+        <!-- 注入事务管理器。-->
+        <!--<property name="transactionManager" ref="txManager"/>-->
+    </bean>
+
+    <!-- 配置 dao 对象。-->
+    <bean id="accountDao" class="com.geek.dao.impl.AccountDaoImpl">
+        <!-- 注入 QueryRunner。-->
+        <property name="queryRunner" ref="queryRunner"/>
+
+        <!-- 注入 ConnectionUtils。-->
+        <property name="connectionUtils" ref="connectionUtils"/>
+    </bean>
+
+    <!--    &lt;!&ndash; 配置 QueryRunner 对象。&ndash;&gt;
+        <bean id="queryRunner" class="org.apache.commons.dbutils.QueryRunner"
+              scope="prototype">&lt;!&ndash; prototype，每来一个连接创建一个对象，线程安全。&ndash;&gt;
+            &lt;!&ndash; 注入数据源。&ndash;&gt;
+            <constructor-arg name="ds" ref="dataSource"/>
+        </bean>-->
+
+    <!-- 配置 QueryRunner 对象。-->
+    <bean id="queryRunner" class="org.apache.commons.dbutils.QueryRunner"
+          scope="prototype"><!-- prototype，每来一个连接创建一个对象，线程安全。-->
+    </bean>
+
+    <!-- 配置数据源对象。-->
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <!-- 连接数据库的必备信息。-->
+        <property name="driverClass" value="com.mysql.jdbc.Driver"/>
+        <property name="jdbcUrl" value="jdbc:mysql://192.168.223.128:3306/geek_spring_dbutils"/>
+        <property name="user" value="root"/>
+        <property name="password" value="root"/>
+    </bean>
+
+
+    <!-- 配置 Connection 的工具类。-->
+    <bean id="connectionUtils" class="com.geek.utils.ConnectionUtils">
+        <!-- 注入数据源。-->
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!-- 配置业务层的管理器。-->
+    <bean id="txManager" class="com.geek.utils.TransactionManager">
+        <!-- 注入 ConnectionUtils。-->
+        <property name="connectionUtils" ref="connectionUtils"/>
+    </bean>
+
+</beans>
